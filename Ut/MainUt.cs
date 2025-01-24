@@ -2032,7 +2032,7 @@ void lcs(char str1[], char str2[], int m, int n) {
                 dp[i][j] = dp[i][j - 1];
 
     lcs_length = dp[m][n];
-    printf(""Length of Longest Common Subsequence : % d\n"", lcs_length);
+    printf(""Length of Longest Common Subsequence of %s, %s : % d\n"", str1, str2, lcs_length);
 
     lcs_str[lcs_length] = '\0';
 
@@ -2239,7 +2239,6 @@ int main() {
         public static void RunAllUt()
         {
             MainUt mainUt = new MainUt();
-
 
             mainUt.adhoc();
 
