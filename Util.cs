@@ -55,13 +55,12 @@ namespace CCompilerNs
             public List<List<Expression>> arrayIndexList = new List<List<Expression>>();
         }
 
-        private static VariablePartInfo GetVariableTypeInfo(VariableId variableId)
+        private static VariablePartInfo GetVariableTypeInfo(Variable variable, VariableId variableId)
         {
             VariablePartInfo p = new VariablePartInfo();
             p.count = variableId.name.Count;
             p.arrayIndexList = variableId.arrayIndexList;
 
-            Variable variable = GetVariableFrom_Local_Param_Global(variableId.name[0]);
             p.type.Add(variable.typeInfo);
             p.offsets.Add(0);
 
@@ -88,7 +87,7 @@ namespace CCompilerNs
             return p;
         }
 
-        private static void PushBaseAddress(string name, VariablePartInfo partInfo)
+        private static void PushBaseAddress(string name)
         {
             Variable variable = GetVariableFrom_Local_Param_Global(name);
 
@@ -107,7 +106,7 @@ namespace CCompilerNs
                 Emit(string.Format("lea {0}(%rbp), %rbx", variable.stackOffset));
 
                 // if pass array as param, then it's address, need to dereference
-                if (partInfo.arrayIndexList[0].Count != 0)
+                if (variable.typeInfo.arraySize.Count != 0)
                     Emit("mov (%rbx), %rbx");
                 Emit(string.Format("push %rbx", variable.name));
             }
@@ -117,9 +116,10 @@ namespace CCompilerNs
 
         public static VariableAddressOrValue PushVariableAddress(VariableId variableId)
         {
-            VariablePartInfo partInfo = GetVariableTypeInfo(variableId);
+            Variable variable = GetVariableFrom_Local_Param_Global(variableId.name[0]);
+            VariablePartInfo partInfo = GetVariableTypeInfo(variable, variableId);
 
-            PushBaseAddress(variableId.name[0], partInfo);
+            PushBaseAddress(variableId.name[0]);
 
             for (int i = 0; i < partInfo.count; i++)
             {

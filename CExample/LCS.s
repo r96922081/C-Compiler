@@ -32,8 +32,6 @@ mov %rax, -800(%rbp)
 mov $0, %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov %rax, -808(%rbp)
 #<= DeclareStatement
 #DeclareStatement =>
@@ -55,8 +53,6 @@ mov %rax, -856(%rbp)
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
 lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
@@ -69,14 +65,10 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 lea 32(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -94,8 +86,6 @@ boolean_no_jmp_label_5:
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
 lea -840(%rbp), %rbx
 push %rbx
 pop %rbx
@@ -108,14 +98,10 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 lea 40(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -134,11 +120,7 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -152,11 +134,7 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -176,16 +154,12 @@ branch_16:
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
 lea -800(%rbp), %rbx
 push %rbx
 lea -840(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -197,8 +171,6 @@ lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $10, %rcx
@@ -228,8 +200,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -250,8 +220,6 @@ add %rax, %rbx
 push %rbx
 pop %rbx
 movzbq (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 lea 24(%rbp), %rbx
 mov (%rbx), %rbx
@@ -261,8 +229,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -283,8 +249,6 @@ add %rax, %rbx
 push %rbx
 pop %rbx
 movzbq (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -309,8 +273,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -327,8 +289,6 @@ lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -353,8 +313,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -369,8 +327,6 @@ pop %rbx
 mov (%rbx), %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov $1, %rcx
 mul %rcx
 mov $8, %rcx
@@ -380,8 +336,6 @@ lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $10, %rcx
@@ -411,8 +365,6 @@ pop %rbx
 mov (%rbx), %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov $1, %rcx
 mul %rcx
 mov $8, %rcx
@@ -422,8 +374,6 @@ lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -447,8 +397,6 @@ add %rax, %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 lea -800(%rbp), %rbx
 push %rbx
@@ -457,8 +405,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -477,8 +423,6 @@ pop %rbx
 mov (%rbx), %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov $10, %rcx
 mul %rcx
 mov $8, %rcx
@@ -494,8 +438,6 @@ add %rax, %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -521,8 +463,6 @@ pop %rbx
 mov (%rbx), %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov $1, %rcx
 mul %rcx
 mov $8, %rcx
@@ -532,8 +472,6 @@ lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -558,16 +496,12 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 lea -800(%rbp), %rbx
 push %rbx
 lea -840(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -579,8 +513,6 @@ lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $10, %rcx
@@ -610,8 +542,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -630,8 +560,6 @@ pop %rbx
 mov (%rbx), %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov $10, %rcx
 mul %rcx
 mov $8, %rcx
@@ -648,16 +576,12 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 lea -800(%rbp), %rbx
 push %rbx
 lea -840(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -669,8 +593,6 @@ lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $10, %rcx
@@ -749,8 +671,6 @@ pop %rbx
 mov (%rbx), %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov $1, %rcx
 mul %rcx
 mov $8, %rcx
@@ -760,8 +680,6 @@ lea 32(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $10, %rcx
@@ -780,8 +698,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 lea -808(%rbp), %rbx
 push %rbx
 pop %rbx
@@ -791,28 +707,22 @@ mov %rax, (%rbx)
 #FunctionCallExpression =>
 lea stringLiteral_0(%rip), %rax
 push %rax
-pop %rax
-push %rax
 lea 16(%rbp), %rbx
+mov (%rbx), %rbx
 push %rbx
 pop %rbx
 mov %rbx, %rax
-push %rax
-pop %rax
 push %rax
 lea 24(%rbp), %rbx
+mov (%rbx), %rbx
 push %rbx
 pop %rbx
 mov %rbx, %rax
-push %rax
-pop %rax
 push %rax
 lea -808(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %r9
 pop %r8
@@ -825,16 +735,12 @@ add $32, %rsp
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
 lea -824(%rbp), %rbx
 push %rbx
 lea -808(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -858,8 +764,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
@@ -872,8 +776,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 lea -840(%rbp), %rbx
 push %rbx
 pop %rbx
@@ -885,8 +787,6 @@ lea -808(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -907,11 +807,7 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -922,11 +818,7 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -948,8 +840,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -970,8 +860,6 @@ add %rax, %rbx
 push %rbx
 pop %rbx
 movzbq (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 lea 24(%rbp), %rbx
 mov (%rbx), %rbx
@@ -981,8 +869,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -1003,8 +889,6 @@ add %rax, %rbx
 push %rbx
 pop %rbx
 movzbq (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -1030,8 +914,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -1053,16 +935,12 @@ push %rbx
 pop %rbx
 movzbq (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 lea -824(%rbp), %rbx
 push %rbx
 lea -856(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -1144,8 +1022,6 @@ pop %rbx
 mov (%rbx), %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov $1, %rcx
 mul %rcx
 mov $8, %rcx
@@ -1155,8 +1031,6 @@ lea -832(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -1180,8 +1054,6 @@ add %rax, %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 lea -800(%rbp), %rbx
 push %rbx
@@ -1190,8 +1062,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $1, %rax
 push %rax
 pop %rbx
@@ -1210,8 +1080,6 @@ pop %rbx
 mov (%rbx), %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov $10, %rcx
 mul %rcx
 mov $8, %rcx
@@ -1227,8 +1095,6 @@ add %rax, %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -1294,14 +1160,10 @@ loop_end_43:
 #FunctionCallExpression =>
 lea stringLiteral_1(%rip), %rax
 push %rax
-pop %rax
-push %rax
 lea -824(%rbp), %rbx
 push %rbx
 pop %rbx
 mov %rbx, %rax
-push %rax
-pop %rax
 push %rax
 pop %rdx
 pop %rcx
@@ -1327,15 +1189,9 @@ push %rbx
 pop %rbx
 mov %rbx, %rax
 push %rax
-pop %rax
-push %rax
 mov $10, %rax
 push %rax
-pop %rax
-push %rax
 lea stringLiteral_2(%rip), %rax
-push %rax
-pop %rax
 push %rax
 pop %r8
 pop %rdx
@@ -1353,15 +1209,9 @@ push %rbx
 pop %rbx
 mov %rbx, %rax
 push %rax
-pop %rax
-push %rax
 mov $10, %rax
 push %rax
-pop %rax
-push %rax
 lea stringLiteral_3(%rip), %rax
-push %rax
-pop %rax
 push %rax
 pop %r8
 pop %rdx
@@ -1377,15 +1227,11 @@ push %rbx
 pop %rbx
 mov %rbx, %rax
 push %rax
-pop %rax
-push %rax
 pop %rcx
 add $-32, %rsp
 call strlen
 add $32, %rsp
 #<= FunctionCallExpression
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov %rax, -40(%rbp)
@@ -1397,15 +1243,11 @@ push %rbx
 pop %rbx
 mov %rbx, %rax
 push %rax
-pop %rax
-push %rax
 pop %rcx
 add $-32, %rsp
 call strlen
 add $32, %rsp
 #<= FunctionCallExpression
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov %rax, -48(%rbp)
@@ -1416,28 +1258,20 @@ push %rbx
 pop %rbx
 mov %rbx, %rax
 push %rax
-pop %rax
-push %rax
 lea -32(%rbp), %rbx
 push %rbx
 pop %rbx
 mov %rbx, %rax
-push %rax
-pop %rax
 push %rax
 lea -40(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 lea -48(%rbp), %rbx
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %r9
 pop %r8
@@ -1449,8 +1283,6 @@ add $32, %rsp
 #<= FunctionCallExpression
 #ReturnStatement =>
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 leave

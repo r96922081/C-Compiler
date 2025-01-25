@@ -1791,15 +1791,16 @@ int main()
         public void adhoc()
         {
             string src = @"
-struct Department {
-    int id;
-    char name[50];
-};
 
+void f1(char str1[])
+{
+    printf(""%s\n"", str1);
 
+}
 int main() {
-    struct Department d;
-    strcpy(d.name, ""Engineering"");
+    char str1[100];
+    strcpy(str1, ""hi"");
+    f1(str1);
 
     return 0;
 }
