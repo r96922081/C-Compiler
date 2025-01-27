@@ -28,7 +28,7 @@ Compile and run [ReverseLinkedList.c](https://r96922081.github.io/C-Compiler/Rev
 
         C-Compiler.exe D:\github\C-Compiler\CExample\LCS.c D:\github\C-Compiler\CExample\LCS.s
 
- 1. Generate AT&T syntax ASM
+ 1. Generate executable by gcc
 
         gcc -no-pie -o LCS.exe LCS.s
         
