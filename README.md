@@ -37,3 +37,7 @@ Compile and run [ReverseLinkedList.c](https://r96922081.github.io/C-Compiler/Rev
         LCS.exe
         Length of Longest Common Subsequence of AGGTABWZ, GXTXAYBYZ :  5
         Longest Common Subsequence: GTABZ
+## Architecture
+![enter image description here](https://r96922081.github.io/C-Compiler/arch.png)
+
+
