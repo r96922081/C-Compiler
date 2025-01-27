@@ -1,5 +1,5 @@
 ## C Compiler 
-This is a C compiler implementation written by C#, support many (but not all) C89 syntax. 
+This is a C compiler written by C#, support many (but not all) C89 syntax. 
 
 Compile and run [8-Queen.c](https://r96922081.github.io/C-Compiler/EightQueen.c) example:
 
