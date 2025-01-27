@@ -40,4 +40,6 @@ Compile and run [ReverseLinkedList.c](https://r96922081.github.io/C-Compiler/Rev
 ## Architecture
 ![enter image description here](https://r96922081.github.io/C-Compiler/arch.png)
 
-
+[LexYacc](https://github.com/r96922081/LexYacc) is my another project, it generates C# code
+[cc.l](https://github.com/r96922081/C-Compiler/blob/main/LexYaccInput/cc.l) 
+[cc.y](https://github.com/r96922081/C-Compiler/blob/main/LexYaccInput/cc.y)
