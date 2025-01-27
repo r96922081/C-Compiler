@@ -13,6 +13,7 @@
         public VariableTypeEnum typeEnum;
         private int size;
         public List<int> arraySize = new List<int>();
+        public int pointerCount = 0;
 
         private void UpdateStructInfo()
         {
@@ -35,6 +36,14 @@
         {
             this.size = size;
         }
+    }
+
+    public class VariablePartInfo
+    {
+        public int count;
+        public List<VariableTypeInfo> type = new List<VariableTypeInfo>();
+        public List<int> offsets = new List<int>();
+        public List<List<Expression>> arrayIndexList = new List<List<Expression>>();
     }
 
     public enum VariableTypeEnum
@@ -87,11 +96,48 @@
         public int offset;
     };
 
+    public enum VariableIdLhsRhsType
+    {
+        Lhs,
+        Value,
+        None
+    }
+
     // a[1].b.c[2][3].d
     public class VariableId
     {
         public List<string> name = new List<string>();
         public List<List<Expression>> arrayIndexList = new List<List<Expression>>();
+        public int pointerCount = 0; // **a.b.c
+        public bool addressOf = false; // &a.b.c
+        public List<string> op = new List<string>(); // . ->
+        public VariableIdLhsRhsType lhsRhs = VariableIdLhsRhsType.None;
+
+        public override string ToString()
+        {
+            string s = name[0];
+            for (int i = 1; i < name.Count; i++)
+                s += op[i-1] + name[i];
+
+            if (addressOf)
+                s = "&" + s;
+
+            for (int i = 0; i < arrayIndexList.Count; i++)
+                if (arrayIndexList[i].Count != 0)
+                    s += "[]";
+
+            return s;
+        }
+    }
+
+    public enum VariableIdType
+    {
+        Dereference,
+        Pointer,
+        ArrayAddress,
+        AddressOf,
+        Struct,
+        PureValue
     }
 
     public class BooleanExpression

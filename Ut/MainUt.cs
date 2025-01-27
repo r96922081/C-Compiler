@@ -410,6 +410,7 @@ int main()
     a++;
     a--;
 
+    b[0] = 0;
     b[0] += 10;
     b[0] -= 2;
     b[0] *= 3;
@@ -1792,16 +1793,305 @@ int main()
         {
             string src = @"
 
-void f1(char str1[])
-{
-    printf(""%s\n"", str1);
 
-}
 int main() {
-    char str1[100];
-    strcpy(str1, ""hi"");
-    f1(str1);
 
+    return 0;
+}
+";
+            Compiler.GenerateAsm(src, "test.s");
+            Tuple<int, string> ret2 = CompileAndRun2("test.s", "test.exe");
+            int exitCode = ret2.Item1;
+            string output = ret2.Item2;
+
+            //Check(exitCode == 3);
+        }
+
+        public void pointer_1()
+        {
+            string src = @"
+int* a = 0;
+int** b = 0;
+int c = 2;
+
+int main() {
+    a = &c;
+    b = &a;
+    int* d = &a;
+    
+    a = *b;
+    c = **b;
+
+    a = &c;
+    *a = 5;
+    **b = 6;
+
+    return 0;
+}
+";
+            Compiler.GenerateAsm(src, "test.s");
+            Tuple<int, string> ret2 = CompileAndRun2("test.s", "test.exe");
+            int exitCode = ret2.Item1;
+            string output = ret2.Item2;
+
+            Check(exitCode == 0);
+        }
+
+        public void pointer_2()
+        {
+            string src = @"
+int main() {
+int* a = 0;
+int** b = 0;
+int c = 77;
+    a = &c;
+    b = &a;
+    int* d = &a;
+
+    if (b != 0)
+        ;
+    else
+        return 1;
+
+    if (b == d)
+        ;
+    else
+        return 2;
+    
+    a = *b;
+    if (*a == 77)
+        ;
+    else
+        return 3;
+
+    c = **b;
+    if (c == 77)
+        ;
+    else
+        return 4;
+
+    a = &c;
+    b = &a;
+
+    *a = 8;
+    if (c == 8)
+        ;
+    else
+        return 5;
+
+    **b = 3;
+    if (c == 3)
+        ;
+    else
+        return 6;
+
+    return 0;
+}
+";
+            Compiler.GenerateAsm(src, "test.s");
+            Tuple<int, string> ret2 = CompileAndRun2("test.s", "test.exe");
+            int exitCode = ret2.Item1;
+            string output = ret2.Item2;
+
+            Check(exitCode == 0);
+        }
+
+        public void pointer_3()
+        {
+            string src = @"
+
+int f1(int* a, int** b)
+{
+    int c = 100;
+    a = *b;
+    if (*a == 77)
+        ;
+    else
+        return 3;
+
+    c = **b;
+    if (c == 77)
+        ;
+    else
+        return 4;
+
+    **b = 3;
+
+    return 0;
+}
+
+int main() {
+    int* a = 0;
+    int** b = 0;
+    int c = 77;
+    a = &c;
+    b = &a;
+    
+    int ret = f1(a, b);
+
+    if (ret != 0)
+        return ret;
+
+    if (c == 3)
+        ;
+    else
+        return 7;
+
+    return 0;
+}
+";
+            Compiler.GenerateAsm(src, "test.s");
+            Tuple<int, string> ret2 = CompileAndRun2("test.s", "test.exe");
+            int exitCode = ret2.Item1;
+            string output = ret2.Item2;
+
+            Check(exitCode == 0);
+        }
+
+        public void pointer_4()
+        {
+            string src = @"
+
+char c[20];
+
+int main() {
+    char* a = malloc(10);
+    strcpy(a, ""hi"");
+    printf(""%s\n"", a);
+
+    char* b = ""hello"";
+    printf(""%s\n"", b);
+
+    sprintf(c, ""%s!%s!"", a, b);
+
+    printf(""%s\n"", c);
+
+    return 0;
+}
+";
+            Compiler.GenerateAsm(src, "test.s");
+            Tuple<int, string> ret2 = CompileAndRun2("test.s", "test.exe");
+            int exitCode = ret2.Item1;
+            string output = ret2.Item2;
+
+            Check(exitCode == 0);
+            Check(output.Contains("hi"));
+            Check(output.Contains("hello"));
+            Check(output.Contains("hi!hello!"));
+        }
+
+        public void pointer_5()
+        {
+            string src = @"
+
+struct A {
+    int a0;
+    int a1;
+    int a2;
+};
+
+struct B {
+    int b0;
+    struct A *b1;
+    int b2;
+    int b3;
+};
+
+int main() {
+    
+    struct B b;
+    struct A a;
+    b.b1 = a;
+    a.a1 = 9;
+
+    if (b.b1->a1 == 9)
+        ;
+    else
+        return 1;
+
+    b.b1->a1 = 7;
+
+    if (a.a1 == 7)
+        ;
+    else
+        return 2;
+
+    return 0;
+}
+";
+            Compiler.GenerateAsm(src, "test.s");
+            Tuple<int, string> ret2 = CompileAndRun2("test.s", "test.exe");
+            int exitCode = ret2.Item1;
+            string output = ret2.Item2;
+
+            Check(exitCode == 0);
+        }
+
+        public void pointer_6()
+        {
+            string src = @"
+
+struct A {
+    int* a0;
+    int a1;
+    int a2;
+};
+
+struct B {
+    int b0;
+    struct A *b1;
+    int* b2;
+    int b3;
+};
+
+struct C {
+    int c1;
+    struct B *c2;
+};
+
+int main() {
+    
+    struct C c;
+    struct B b;
+    struct A a;
+    int x = 8;
+    int *y = 0;
+
+    c.c2 = &b;
+    b.b1 = &a;
+
+    c.c2->b3 = 9;
+    if (c.c2->b3 == 9 && b.b3 == 9)
+        ;
+    else
+        return 1;
+
+    c.c2->b1->a1 = 2;
+
+
+    if (c.c2->b1->a1 == 2 && a.a1 == 2)
+        ;
+    else
+        return 2;
+
+    c.c2->b1->a1 = &x;
+    *c.c2->b1->a1 = 4;
+
+    if (*c.c2->b1->a1 == 4 && x == 4)
+        ;
+    else
+        return 3;
+
+    y = &c.c2->b1->a2;
+    *y = 5;
+
+    if (c.c2->b1->a2 == 5 && *y == 5)
+        ;
+    else
+        return 4;
+
+    printf(""%d"", *c.c2->b1->a1);
+    
     return 0;
 }
 ";
@@ -2056,10 +2346,8 @@ void lcs(char str1[], char str2[], int m, int n) {
 }
 
 int main() {
-    char str1[10];
-    strcpy_s(str1, 10, ""AGGTABWZ"");
-    char str2[10];
-    strcpy_s(str2, 10, ""GXTXAYBYZ"");
+    char *str1 = ""AGGTABWZ"";
+    char *str2 = ""GXTXAYBYZ"";
     int m = strlen(str1);
     int n = strlen(str2);
     lcs(str1, str2, m, n);
@@ -2237,6 +2525,83 @@ int main() {
             Check(output.Contains("Department: Department ID: 1, Name: Engineering"));
         }
 
+        public void ReverseLinkedList()
+        {
+            string src = @"
+struct Node {
+    int value;
+    struct Node* next;
+};
+
+void add_node(struct Node** head, int value) {
+    struct Node* new_node = malloc(20);
+    new_node->value = value;
+    new_node->next = *head;
+    *head = new_node;
+}
+
+void print_list(struct Node* head) {
+    struct Node* current = head;
+    while (current != 0) {
+        printf(""%d -> "", current->value);
+        current = current->next;
+    }
+    printf(""NULL\n"");
+}
+
+void reverse_list(struct Node** head) {
+    struct Node* prev = 0;
+    struct Node* current = *head;
+    struct Node* next = 0;
+
+    while (current != 0) {
+        next = current->next;
+        current->next = prev; 
+        prev = current; 
+        current = next; 
+    }
+
+    *head = prev; 
+}
+
+void free_list(struct Node** head) {
+    struct Node* current = *head;
+    while (current != 0) {
+        struct Node* temp = current;
+        current = current->next;
+    }
+}
+
+int main() {
+    struct Node* head = 0;
+
+    add_node(&head, 10);
+    add_node(&head, 20);
+    add_node(&head, 30);
+    add_node(&head, 40);
+    add_node(&head, 50);
+
+    printf(""Original list: "");
+    print_list(head);
+
+    reverse_list(&head);
+
+    printf(""Reversed list: "");
+    print_list(head);
+
+    return 0;
+}
+";
+            Compiler.GenerateAsm(src, "test.s");
+            Tuple<int, string> ret2 = CompileAndRun2("test.s", "test.exe");
+            int exitCode = ret2.Item1;
+            string output = ret2.Item2;
+
+            Check(exitCode == 0);
+            Check(output.Contains("Original list: 50 -> 40 -> 30 -> 20 -> 10 -> NULL"));
+            Check(output.Contains("Reversed list: 10 -> 20 -> 30 -> 40 -> 50 -> NULL"));
+        }
+
         public static void RunAllUt()
         {
             MainUt mainUt = new MainUt();
@@ -2326,6 +2691,13 @@ int main() {
             mainUt.call_c_function_4();
             mainUt.call_c_function_5();
 
+            mainUt.pointer_1();
+            mainUt.pointer_2();
+            mainUt.pointer_3();
+            mainUt.pointer_4();
+            mainUt.pointer_5();
+            mainUt.pointer_6();
+
             mainUt.comment_1();
             mainUt.comment_2();
 
@@ -2335,6 +2707,7 @@ int main() {
             mainUt.LCS();
             mainUt.MagicNumber();
             mainUt.JobAssignment();
+            mainUt.ReverseLinkedList();
 
         }
 

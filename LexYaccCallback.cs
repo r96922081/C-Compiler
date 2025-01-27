@@ -94,7 +94,7 @@
             DeclareStatement n = new DeclareStatement();
             n.typeInfo = Util.GetType(d.type);
             n.name = d.name;
-            n.value = expression;
+            n.rhsValue = expression;
 
             if (d.arraySize != null)
                 n.typeInfo.arraySize.AddRange(d.arraySize);
@@ -105,8 +105,12 @@
         public static AssignmentStatement AssignmentStatement(VariableId variableId, Expression expression)
         {
             AssignmentStatement a = new AssignmentStatement();
-            a.variableId = variableId;
-            a.value = expression;
+
+            VariableIdExpression e = new VariableIdExpression();
+            e.variableId = variableId;
+
+            a.lhs = e;
+            a.rhsValue = expression;
 
             return a;
         }
@@ -114,7 +118,10 @@
         public static AssignmentStatement OpAssignmentStatement(VariableId variableId, Expression rhs, string op)
         {
             AssignmentStatement a = new AssignmentStatement();
-            a.variableId = variableId;
+            VariableIdExpression e = new VariableIdExpression();
+            e.variableId = variableId;
+
+            a.lhs = e;
 
             Expression lhs = null;
 
@@ -123,7 +130,7 @@
 
             lhs = Expression(variableId);
 
-            a.value = Expression(lhs, op, rhs);
+            a.rhsValue = Expression(lhs, op, rhs);
 
             return a;
         }
@@ -131,18 +138,18 @@
         public static AssignmentStatement IncrementDecrement(VariableId variableId, string op)
         {
             AssignmentStatement a = new AssignmentStatement();
-            a.variableId = variableId;
+            VariableIdExpression e = new VariableIdExpression();
+            e.variableId = variableId;
+            a.lhs = e;
 
             Expression rhs = Expression(1);
-
-            Expression lhs = null;
 
             // ++, --
             op = op.Substring(0, 1);
 
-            lhs = Expression(variableId);
+            Expression lhs = Expression(variableId);
 
-            a.value = Expression(lhs, op, rhs);
+            a.rhsValue = Expression(lhs, op, rhs);
 
             return a;
         }
@@ -174,6 +181,24 @@
             return v;
         }
 
+        public static Expression Expression(VariableId variableId, bool addressOf)
+        {
+            VariableIdExpression v = new VariableIdExpression();
+            v.variableId = variableId;
+            v.variableId.addressOf = addressOf;
+
+            return v;
+        }
+
+        public static Expression Expression(VariableId variableId, string pointers)
+        {
+            VariableIdExpression v = new VariableIdExpression();
+            v.variableId = variableId;
+            v.variableId.pointerCount = pointers.Length;
+
+            return v;
+        }
+
         public static Expression Expression(FunctionCallExpression functionCallExpression)
         {
             Expression a = new Expression();
@@ -185,7 +210,7 @@
         public static Expression Expression(Expression lhs)
         {
             Expression a = new Expression();
-            a.lhs = lhs;
+            a.first = lhs;
 
             return a;
         }
@@ -193,11 +218,11 @@
         public static Expression Expression(Expression lhs, string op, int rhsIntValue)
         {
             Expression a = new Expression();
-            a.lhs = lhs;
+            a.first = lhs;
             a.op = op;
 
-            a.rhs = new Expression();
-            a.rhs.intValue = rhsIntValue;
+            a.second = new Expression();
+            a.second.intValue = rhsIntValue;
 
             return a;
         }
@@ -206,11 +231,11 @@
         public static Expression Expression(Expression lhs, string op, FunctionCallExpression functionCallExpression)
         {
             Expression a = new Expression();
-            a.lhs = lhs;
+            a.first = lhs;
             a.op = op;
 
-            a.rhs = new Expression();
-            a.rhs.functionCall = functionCallExpression;
+            a.second = new Expression();
+            a.second.functionCall = functionCallExpression;
 
             return a;
         }
@@ -219,9 +244,9 @@
         {
             Expression a = new Expression();
 
-            a.lhs = lhs;
+            a.first = lhs;
             a.op = op;
-            a.rhs = Expression(variableId);
+            a.second = Expression(variableId);
 
             return a;
         }
@@ -229,9 +254,9 @@
         public static Expression Expression(Expression lhs, string op, Expression rhs)
         {
             Expression a = new Expression();
-            a.lhs = lhs;
+            a.first = lhs;
             a.op = op;
-            a.rhs = rhs;
+            a.second = rhs;
 
             return a;
         }
@@ -514,13 +539,14 @@
             return fields;
         }
 
-        public static VariableId VariableId(VariableId prev, string id, List<Expression> arrayIndex)
+        public static VariableId VariableId(VariableId prev, string id, List<Expression> arrayIndex, string op)
         {
             VariableId v = new VariableId();
             if (prev != null)
             {
                 v.name.AddRange(prev.name);
                 v.arrayIndexList.AddRange(prev.arrayIndexList);
+                v.op.AddRange(prev.op);
             }
 
             v.name.Add(id);
@@ -529,6 +555,19 @@
                 v.arrayIndexList.Add(arrayIndex);
             else
                 v.arrayIndexList.Add(new List<Expression>());
+
+            if (op != null)
+                v.op.Add(op);
+
+            return v;
+        }
+
+        public static VariableId VariableId(VariableId v, string pointers)
+        {
+            if (pointers == null)
+                v.pointerCount = 0;
+            else
+                v.pointerCount = pointers.Length;
 
             return v;
         }

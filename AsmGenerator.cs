@@ -1,9 +1,12 @@
-﻿namespace CCompilerNs
+﻿using System.Drawing;
+
+namespace CCompilerNs
 {
     public class AsmGenerator
     {
         public string s = "";
         public static string outputFilePath = null;
+        public static bool outputToConsole = true;
 
         public virtual void EmitAsm()
         {
@@ -17,7 +20,8 @@
 
         public static void EmitToChannel(string asm)
         {
-            Console.WriteLine(asm);
+            if (outputToConsole)
+                Console.WriteLine(asm);
             if (outputFilePath != null)
                 File.AppendAllText(outputFilePath, asm + "\n");
         }
@@ -367,27 +371,26 @@ new %rbp - 16-> local2
                 if (p.typeInfo.typeEnum != VariableTypeEnum.struct_type)
                     continue;
 
+                if (p.typeInfo.arraySize.Count > 0)
+                    continue;
+
+                if (p.typeInfo.pointerCount > 0)
+                    continue;
+
                 int size = p.typeInfo.GetSize();
                 int oldStackOffset = p.stackOffset;
                 p.stackOffset = -(oldLocalSize + size);
                 int oldAddress = p.stackOffset;
+                // push src
+                Emit(string.Format("lea {0}(%rbp), %rax", oldStackOffset));
+                Emit(string.Format("mov (%rax), %rax"));
+                Emit(string.Format("push %rax"));
 
-                /*  
-                    # copy memory
-                    mov $0x0000000000001000, %rsi  # Source address (64-bit)
-                    mov $0x0000000000002000, %rdi  # Destination address (64-bit)
-                    mov $24, %rcx                  # Number of bytes to copy
-                    cld                            # clear flag, %rsi, %rdi increments while copy
-                    rep movsb                      # Repeat move byte (RCX times)
-                 */
+                // push dest
+                Emit(string.Format("lea {0}(%rbp), %rax", p.stackOffset));                
+                Emit(string.Format("push %rax"));
 
-                Emit(string.Format("mov {0}(%rbp), %rax", oldStackOffset));
-                Emit(string.Format("mov %rax, %rsi"));
-                Emit(string.Format("lea {0}(%rbp), %rax", p.stackOffset));
-                Emit(string.Format("mov %rax, %rdi"));
-                Emit(string.Format("mov ${0}, %rcx", size));
-                Emit(string.Format("cld"));
-                Emit(string.Format("rep movsb"));
+                Util.GenCopyParamStructAsm(size);
 
                 oldLocalSize += size;
             }
@@ -526,23 +529,41 @@ ret";
 
     public class AssignmentStatement : Statement
     {
-        public VariableId variableId;
-        public Expression value;
+        public VariableIdExpression lhs;
+        public Expression rhsValue;
 
         public override void EmitAsm()
         {
             Emit("#AssignmentStatement =>");
 
-            value.EmitAsm();
-            Util.PushVariableAddress(variableId);
+            Util.SetVaraibleIdLhsRhsType(rhsValue, VariableIdLhsRhsType.Value);
+            rhsValue.EmitAsm();
+            Util.SetVaraibleIdLhsRhsType(lhs, VariableIdLhsRhsType.Lhs);
+            lhs.EmitAsm();
+
             Emit("pop %rbx");
             Emit("pop %rax");
 
-            Variable variable = Util.GetVariableFrom_Local_Param_Global(variableId.name[0]);
-            if (variableId.arrayIndexList[0].Count != 0 && variable.typeInfo.GetSize() == 1)
+            Variable variable = Util.GetVariableFrom_Local_Param_Global(lhs.variableId.name[0]);
+            VariablePartInfo partInfo = Util.GetVariableTypeInfo(variable, lhs.variableId);
+            VariableIdType type = Util.GetVariableIdType(variable, lhs.variableId, partInfo);
+            if (type == VariableIdType.Struct)
+            {
+                // push src
+                Emit(string.Format("push %rax"));
+                // push dest
+                Emit(string.Format("push %rbx"));
+
+                Util.GenCopyParamStructAsm(partInfo.type[partInfo.count - 1].GetSize());
+            }
+            else if (lhs.variableId.arrayIndexList[0].Count != 0 && variable.typeInfo.GetSize() == 1)
+            {
                 Emit("mov %al, (%rbx)");
+            }
             else
+            {
                 Emit("mov %rax, (%rbx)");
+            }
 
             Emit("#<= AssignmentStatement");
         }
@@ -552,19 +573,20 @@ ret";
     {
         public VariableTypeInfo typeInfo;
         public string name;
-        public Expression value;
+        public Expression rhsValue;
         public int stackOffset;
 
         public override void EmitAsm()
         {
             Emit("#DeclareStatement =>");
-            if (value != null)
+            if (rhsValue != null)
             {
-                value.EmitAsm();
+                Util.SetVaraibleIdLhsRhsType(rhsValue, VariableIdLhsRhsType.Value);
+                rhsValue.EmitAsm();
                 Emit("pop %rax");
+                Emit(string.Format("mov %rax, {0}(%rbp)", stackOffset));
             }
 
-            Emit(string.Format("mov %rax, {0}(%rbp)", stackOffset));
             Emit("#<= DeclareStatement");
         }
     }
@@ -589,20 +611,6 @@ new %rbp - 16-> local2
         public override void EmitAsm()
         {
             Emit("#FunctionCallExpression =>");
-
-            // 16-byte align seemed unnecessary, and it may has bug in my implementation
-            // because some test case failed after uncommenting it
-            /*
-            Emit(string.Format("mov %rsp, %rax # stack 16-byte align, before calling function"));
-            Emit(string.Format("andq $0xF, %rax"));
-            string alignedLabel = string.Format("aligned_{0}", (Gv.sn++));
-            if (parameters == null || parameters.Count % 2 == 0)
-                Emit(string.Format("jz {0}", alignedLabel));
-            else
-                Emit(string.Format("jnz {0}", alignedLabel));
-            Emit(string.Format("pushq $0"));
-            Emit(string.Format("{0}:", alignedLabel));*/
-
 
             if (parameters != null)
             {
@@ -649,18 +657,6 @@ new %rbp - 16-> local2
                 }
             }
 
-            /*
-            Emit(string.Format("mov %rsp, %rax # restore stack 16-byte align fix, after calling function"));
-            Emit(string.Format("andq $0xF, %rax"));
-            alignedLabel = string.Format("aligned_{0}", (Gv.sn++));
-            if (parameters == null || parameters.Count % 2 == 0)
-                Emit(string.Format("jz {0}", alignedLabel));
-            else
-                Emit(string.Format("jnz {0}", alignedLabel));
-            Emit(string.Format("pop %rax"));
-            Emit(string.Format("{0}:", alignedLabel));*/
-
-
             Emit("#<= FunctionCallExpression");
         }
     }
@@ -668,9 +664,9 @@ new %rbp - 16-> local2
     // save result in stack
     public class Expression : AsmGenerator
     {
-        public Expression lhs = null;
+        public Expression first = null;
         public string? op = null;
-        public Expression rhs = null;
+        public Expression second = null;
         public int? intValue = null;
         public string? stringLiternal = null;
         public FunctionCallExpression? functionCall = null;
@@ -696,14 +692,16 @@ new %rbp - 16-> local2
             }
             else
             {
-                lhs.EmitAsm();
+                Util.SetVaraibleIdLhsRhsType(first, VariableIdLhsRhsType.Value);
+                first.EmitAsm();
 
-                if (rhs != null)
+                if (second != null)
                 {
+                    Util.SetVaraibleIdLhsRhsType(second, VariableIdLhsRhsType.Value);
                     // case addExpression: addExpression '+' mulExpression
-                    if (rhs is Expression)
+                    if (second is Expression)
                     {
-                        rhs.EmitAsm();
+                        second.EmitAsm();
                     }
                     // case mulExpression: mulExpression '*' INT_VALUE
                     else
@@ -741,15 +739,147 @@ new %rbp - 16-> local2
         public override void EmitAsm()
         {
             Variable variable = Util.GetVariableFrom_Local_Param_Global(variableId.name[0]);
-            VariableAddressOrValue addrOrValue = Util.PushVariableAddress(variableId);
+            VariablePartInfo partInfo = Util.GetVariableTypeInfo(variable, variableId);
+            VariableIdType type = Util.GetVariableIdType(variable, variableId, partInfo);
+            Util.PushVariableAddress(variableId);
             Emit("pop %rbx");
 
-            if (addrOrValue == VariableAddressOrValue.Address)
-                Emit(string.Format("mov %rbx, %rax"));
-            else if (variableId.arrayIndexList[0].Count != 0 && variable.typeInfo.GetSize() == 1)
-                Emit(string.Format("movzbq (%rbx), %rax")); // case a[1][2]
+            // lhs used only in assigment, save "address" in stack for assignment to use it
+            // rhs, save "value" in stack
+            if (variableId.lhsRhs == VariableIdLhsRhsType.Lhs)
+            {
+                if (type == VariableIdType.Dereference)
+                {
+                    for (int i = 0; i < variableId.pointerCount; i++)
+                        Emit(string.Format("mov (%rbx), %rbx"));
+                }
+
+                // lhs, always return address
+                if (type == VariableIdType.Dereference || type == VariableIdType.ArrayAddress
+                    || type == VariableIdType.PureValue || type == VariableIdType.Struct
+                    || type == VariableIdType.Pointer)
+                {
+                    Emit(string.Format("push %rbx"));
+                }
+                else
+                    throw new Exception();
+            }
+            else if (variableId.lhsRhs == VariableIdLhsRhsType.Value || variableId.lhsRhs == VariableIdLhsRhsType.Value)
+            {
+                // return address as value
+                if (type == VariableIdType.ArrayAddress || type == VariableIdType.AddressOf || type == VariableIdType.Struct)
+                {
+                    Emit(string.Format("push %rbx"));
+                }
+                // return pure value
+                else if (type == VariableIdType.Dereference)
+                {
+                    Emit(string.Format("mov (%rbx), %rbx"));
+                    for (int i = 0; i < variableId.pointerCount; i++)
+                        Emit(string.Format("mov (%rbx), %rbx"));
+                    Emit(string.Format("push %rbx"));
+                }
+                // return value
+                else if (type == VariableIdType.PureValue || type == VariableIdType.Pointer)
+                {
+                    // only char in char array size is 1, not 8
+                    if (variableId.arrayIndexList[0].Count != 0 && variable.typeInfo.GetSize() == 1)
+                        Emit(string.Format("movzbq (%rbx), %rax"));
+                    else
+                        Emit(string.Format("mov (%rbx), %rax"));
+
+                    Emit(string.Format("push %rax"));
+                }
+                else
+                    throw new Exception();
+            }
             else
-                Emit(string.Format("mov (%rbx), %rax")); // case local, or array with element size = 8
+                throw new Exception("Did not assign VariableId.lhsRhs");
+        }
+
+        public  void EmitAsm_old()
+        {
+            Variable variable = Util.GetVariableFrom_Local_Param_Global(variableId.name[0]);
+            VariablePartInfo partInfo = Util.GetVariableTypeInfo(variable, variableId);
+            Util.PushVariableAddress(variableId);
+            Emit("pop %rbx");
+
+            /*
+             [param, local, global]
+                 x
+             [
+              (1) lhs assign, address, a = 3 (2) lhs assign, dereference, **a = 1
+              
+              (3) rhs address of, &a  (4) rhs array address, int a[2][3], int* b = a[1], int** b = a;
+              (5) rhs dereference int a = **b; (6) rhs struct
+             ]
+             */ 
+
+            if (variable.scope == VariableScopeEnum.param)
+            {
+                // case: int *a, int **a;
+                if (partInfo.type[partInfo.count - 1].pointerCount != 0)
+                {
+                    // case: a = &b
+                    if (variableId.addressOf)
+                        Emit(string.Format("mov %rbx, %rax"));
+                    // case: a =*b; c = **b;
+                    else if (variableId.pointerCount != 0)
+                    {
+                        Emit(string.Format("mov (%rbx), %rbx"));
+                        for (int i = 0; i < variableId.pointerCount; i++)
+                            Emit(string.Format("mov (%rbx), %rbx"));
+                        Emit(string.Format("mov %rbx, %rax"));
+                    }
+                }
+                // case: int a[2][3][4], use a, a[0], a[0][1]
+                else if (partInfo.type[partInfo.count - 1].arraySize.Count != partInfo.arrayIndexList[partInfo.count - 1].Count)
+                    Emit(string.Format("mov %rbx, %rax"));
+                // case: f1(struct A a);  // a is copy to stack
+                else if (partInfo.type[partInfo.count - 1].typeEnum == VariableTypeEnum.struct_type)
+                    Emit(string.Format("mov (%rbx), %rax"));
+                else if (variableId.pointerCount != 0)
+                    Emit(string.Format("mov (%rbx), %rax"));
+                // case: char in array, ex: char a[2][3], use a[1][2];
+                else if (variableId.arrayIndexList[0].Count != 0 && variable.typeInfo.GetSize() == 1)
+                    Emit(string.Format("movzbq (%rbx), %rax"));
+                // case: local, or array with element size = 8
+                else
+                    Emit(string.Format("mov (%rbx), %rax"));
+            }
+            else if (variable.scope == VariableScopeEnum.local || variable.scope == VariableScopeEnum.global)
+            {
+                // case: a = &b
+                if (variableId.addressOf)
+                    Emit(string.Format("mov %rbx, %rax"));
+                // case: a =*b; c = **b;
+                else if (variableId.pointerCount != 0)
+                {
+                    Emit(string.Format("mov (%rbx), %rbx"));
+                    for (int i = 0; i < variableId.pointerCount; i++)
+                        Emit(string.Format("mov (%rbx), %rbx"));
+                    Emit(string.Format("mov %rbx, %rax"));
+                }
+                // case: int* a, int **a, pass a into a function
+                else if (partInfo.type[partInfo.count - 1].pointerCount != 0)
+                {
+                    Emit(string.Format("mov (%rbx), %rax"));
+                }
+                // case int a[2][3][4], use a, a[0], a[0][1]
+                else if (partInfo.type[partInfo.count - 1].arraySize.Count != partInfo.arrayIndexList[partInfo.count - 1].Count)
+                    Emit(string.Format("mov %rbx, %rax"));
+                // case: a, a is struct; a.b.c, c is struct
+                else if (partInfo.type[partInfo.count - 1].typeEnum == VariableTypeEnum.struct_type)
+                    Emit(string.Format("mov %rbx, %rax"));
+                // case: char in array, ex: char a[2][3], use a[1][2];
+                else if (variableId.arrayIndexList[0].Count != 0 && variable.typeInfo.GetSize() == 1)
+                    Emit(string.Format("movzbq (%rbx), %rax"));
+                // case: local, or array with element size = 8
+                else
+                    Emit(string.Format("mov (%rbx), %rax"));
+            }
+            else
+                throw new Exception();
 
             Emit(string.Format("push %rax"));
         }
