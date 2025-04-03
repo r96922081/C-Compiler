@@ -8,9 +8,9 @@
 
 .data
 
-stringLiteral_83:  .asciz "Magic Square of size %d:\n"
-stringLiteral_84:  .asciz "%4d"
-stringLiteral_85:  .asciz "\n"
+stringLiteral_0:  .asciz "Magic Square of size %d:\n"
+stringLiteral_1:  .asciz "%4d"
+stringLiteral_2:  .asciz "\n"
 
 .text
 
@@ -23,21 +23,15 @@ add $-40, %rsp
 lea 16(%rbp), %rax
 mov %rcx, (%rax)
 #DeclareStatement =>
-mov %rax, -8(%rbp)
 #<= DeclareStatement
 #DeclareStatement =>
-mov %rax, -16(%rbp)
 #<= DeclareStatement
 #DeclareStatement =>
-mov %rax, -24(%rbp)
 #<= DeclareStatement
 #DeclareStatement =>
-mov %rax, -32(%rbp)
 #<= DeclareStatement
 #DeclareStatement =>
 mov $1, %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov %rax, -40(%rbp)
@@ -45,16 +39,16 @@ mov %rax, -40(%rbp)
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 #AssignmentStatement =>
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, n
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -66,9 +60,9 @@ pop %rax
 movq $0, %rdx
 div %rbx
 push %rax
-pop %rax
-push %rax
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -76,19 +70,17 @@ mov %rax, (%rbx)
 #<= AssignmentStatement
 #WhileLoopStatement =>
 loop_start_0:
-lea -40(%rbp), %rbx
+lea -40(%rbp), %rbx # local, num
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, n
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, n
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -96,8 +88,6 @@ push %rax
 pop %rbx
 pop %rax
 mul %rbx
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -112,21 +102,17 @@ jmp boolean_no_jmp_label_5
 boolean_true_label_4:
 boolean_no_jmp_label_5:
 #AssignmentStatement =>
-lea -40(%rbp), %rbx
+lea -40(%rbp), %rbx # local, num
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea magicSquare(%rip), %rbx
+lea magicSquare(%rip), %rbx # global, magicSquare[]
 push %rbx
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -134,12 +120,10 @@ mul %rcx
 mov $8, %rcx
 mul %rcx
 push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $15, %rcx
@@ -156,11 +140,13 @@ pop %rbx
 add %rax, %rbx
 push %rbx
 pop %rbx
+push %rbx
+pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 #AssignmentStatement =>
-lea -40(%rbp), %rbx
+lea -40(%rbp), %rbx # local, num
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -171,19 +157,19 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -40(%rbp), %rbx
+lea -40(%rbp), %rbx # local, num
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 #AssignmentStatement =>
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -191,19 +177,19 @@ pop %rbx
 pop %rax
 sub %rbx, %rax
 push %rax
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, new_i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 #AssignmentStatement =>
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -211,22 +197,20 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, new_j
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, new_i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -243,12 +227,10 @@ boolean_no_jmp_label_11:
 jmp branch_compound_if_end_14
 branch_8:
 #AssignmentStatement =>
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, n
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -256,7 +238,9 @@ pop %rbx
 pop %rax
 sub %rbx, %rax
 push %rax
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, new_i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -264,19 +248,15 @@ mov %rax, (%rbx)
 #<= AssignmentStatement
 jmp branch_compound_if_end_14
 branch_compound_if_end_14:
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, new_j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, n
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -295,9 +275,9 @@ branch_15:
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, new_j
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -305,14 +285,12 @@ mov %rax, (%rbx)
 #<= AssignmentStatement
 jmp branch_compound_if_end_21
 branch_compound_if_end_21:
-lea magicSquare(%rip), %rbx
+lea magicSquare(%rip), %rbx # global, magicSquare[]
 push %rbx
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, new_j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -320,12 +298,10 @@ mul %rcx
 mov $8, %rcx
 mul %rcx
 push %rax
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, new_i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $15, %rcx
@@ -344,11 +320,7 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -365,12 +337,10 @@ boolean_no_jmp_label_25:
 jmp branch_compound_if_end_28
 branch_22:
 #AssignmentStatement =>
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -378,25 +348,23 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, new_i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, new_i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, n
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -415,9 +383,9 @@ branch_29:
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, new_i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -426,14 +394,14 @@ mov %rax, (%rbx)
 jmp branch_compound_if_end_35
 branch_compound_if_end_35:
 #AssignmentStatement =>
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, new_j
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -442,28 +410,28 @@ mov %rax, (%rbx)
 jmp branch_compound_if_end_28
 branch_compound_if_end_28:
 #AssignmentStatement =>
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, new_i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 #AssignmentStatement =>
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, new_j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -474,16 +442,12 @@ jmp loop_start_0
 loop_end_1:
 #<= WhileLoopStatement
 #FunctionCallExpression =>
-lea stringLiteral_83(%rip), %rax
+lea stringLiteral_0(%rip), %rax
 push %rax
-pop %rax
-push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, n
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rdx
 pop %rcx
@@ -495,28 +459,24 @@ add $32, %rsp
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 loop_start_36:
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, n
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -534,28 +494,24 @@ boolean_no_jmp_label_41:
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 loop_start_44:
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, n
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -570,18 +526,14 @@ jmp boolean_no_jmp_label_49
 boolean_true_label_48:
 boolean_no_jmp_label_49:
 #FunctionCallExpression =>
-lea stringLiteral_84(%rip), %rax
+lea stringLiteral_1(%rip), %rax
 push %rax
-pop %rax
-push %rax
-lea magicSquare(%rip), %rbx
+lea magicSquare(%rip), %rbx # global, magicSquare[]
 push %rbx
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -589,12 +541,10 @@ mul %rcx
 mov $8, %rcx
 mul %rcx
 push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $15, %rcx
@@ -613,8 +563,6 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
 pop %rdx
 pop %rcx
 add $-32, %rsp
@@ -623,7 +571,7 @@ add $32, %rsp
 #<= FunctionCallExpression
 updater_46:
 #AssignmentStatement =>
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -634,7 +582,9 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -644,9 +594,7 @@ jmp loop_start_44
 loop_end_45:
 #<= ForLoopStatement
 #FunctionCallExpression =>
-lea stringLiteral_85(%rip), %rax
-push %rax
-pop %rax
+lea stringLiteral_2(%rip), %rax
 push %rax
 pop %rcx
 add $-32, %rsp
@@ -655,7 +603,7 @@ add $32, %rsp
 #<= FunctionCallExpression
 updater_38:
 #AssignmentStatement =>
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -666,7 +614,9 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -687,8 +637,6 @@ add $0, %rsp
 #FunctionCallExpression =>
 mov $7, %rax
 push %rax
-pop %rax
-push %rax
 pop %rcx
 add $-32, %rsp
 call generateMagicSquare
@@ -696,8 +644,6 @@ add $32, %rsp
 #<= FunctionCallExpression
 #ReturnStatement =>
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 leave

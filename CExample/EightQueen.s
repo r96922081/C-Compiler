@@ -30,36 +30,30 @@ mov %rdx, (%rax)
 mov $0, %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov %rax, -8(%rbp)
 #<= DeclareStatement
 #ForLoopStatement =>
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 loop_start_0:
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, row
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -73,14 +67,12 @@ jmp loop_end_1
 jmp boolean_no_jmp_label_5
 boolean_true_label_4:
 boolean_no_jmp_label_5:
-lea board(%rip), %rbx
+lea board(%rip), %rbx # global, board[]
 push %rbx
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -97,14 +89,10 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea 24(%rbp), %rbx
+lea 24(%rbp), %rbx # param, col
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -124,21 +112,17 @@ branch_8:
 mov $0, %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 leave
 ret
 #<= ReturnStatement
 jmp branch_compound_if_end_14
 branch_compound_if_end_14:
-lea board(%rip), %rbx
+lea board(%rip), %rbx # global, board[]
 push %rbx
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -155,9 +139,7 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -166,14 +148,12 @@ pop %rbx
 pop %rax
 sub %rbx, %rax
 push %rax
-lea 24(%rbp), %rbx
+lea 24(%rbp), %rbx # param, col
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, row
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -200,21 +180,17 @@ branch_15:
 mov $0, %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 leave
 ret
 #<= ReturnStatement
 jmp branch_compound_if_end_21
 branch_compound_if_end_21:
-lea board(%rip), %rbx
+lea board(%rip), %rbx # global, board[]
 push %rbx
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -231,9 +207,7 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -242,14 +216,12 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea 24(%rbp), %rbx
+lea 24(%rbp), %rbx # param, col
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, row
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -276,8 +248,6 @@ branch_22:
 mov $0, %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 leave
 ret
 #<= ReturnStatement
@@ -285,7 +255,7 @@ jmp branch_compound_if_end_28
 branch_compound_if_end_28:
 updater_2:
 #AssignmentStatement =>
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -296,7 +266,9 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -307,8 +279,6 @@ loop_end_1:
 #<= ForLoopStatement
 #ReturnStatement =>
 mov $1, %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 leave
@@ -329,31 +299,23 @@ mov %rcx, (%rax)
 mov $0, %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov %rax, -8(%rbp)
 #<= DeclareStatement
 #DeclareStatement =>
 mov $0, %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov %rax, -16(%rbp)
 #<= DeclareStatement
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, row
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea N(%rip), %rbx
+lea N(%rip), %rbx # global, N
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -373,28 +335,24 @@ branch_29:
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 loop_start_36:
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea N(%rip), %rbx
+lea N(%rip), %rbx # global, N
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -412,28 +370,24 @@ boolean_no_jmp_label_41:
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 loop_start_44:
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea N(%rip), %rbx
+lea N(%rip), %rbx # global, N
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -447,14 +401,12 @@ jmp loop_end_45
 jmp boolean_no_jmp_label_49
 boolean_true_label_48:
 boolean_no_jmp_label_49:
-lea board(%rip), %rbx
+lea board(%rip), %rbx # global, board[]
 push %rbx
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -471,14 +423,10 @@ push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -498,8 +446,6 @@ branch_52:
 #FunctionCallExpression =>
 lea stringLiteral_0(%rip), %rax
 push %rax
-pop %rax
-push %rax
 pop %rcx
 add $-32, %rsp
 call printf
@@ -510,8 +456,6 @@ branch_58:
 #FunctionCallExpression =>
 lea stringLiteral_1(%rip), %rax
 push %rax
-pop %rax
-push %rax
 pop %rcx
 add $-32, %rsp
 call printf
@@ -521,7 +465,7 @@ jmp branch_compound_if_end_59
 branch_compound_if_end_59:
 updater_46:
 #AssignmentStatement =>
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -532,7 +476,9 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, j
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -544,8 +490,6 @@ loop_end_45:
 #FunctionCallExpression =>
 lea stringLiteral_2(%rip), %rax
 push %rax
-pop %rax
-push %rax
 pop %rcx
 add $-32, %rsp
 call printf
@@ -553,7 +497,7 @@ add $32, %rsp
 #<= FunctionCallExpression
 updater_38:
 #AssignmentStatement =>
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -564,7 +508,9 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -576,8 +522,6 @@ loop_end_37:
 #FunctionCallExpression =>
 lea stringLiteral_2(%rip), %rax
 push %rax
-pop %rax
-push %rax
 pop %rcx
 add $-32, %rsp
 call printf
@@ -585,8 +529,6 @@ add $32, %rsp
 #<= FunctionCallExpression
 #ReturnStatement =>
 mov $1, %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 leave
@@ -598,14 +540,10 @@ branch_compound_if_end_35:
 mov $0, %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov %rax, -24(%rbp)
 #<= DeclareStatement
 #DeclareStatement =>
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov %rax, -32(%rbp)
@@ -614,28 +552,24 @@ mov %rax, -32(%rbp)
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, col
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 loop_start_60:
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, col
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea N(%rip), %rbx
+lea N(%rip), %rbx # global, N
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -650,19 +584,15 @@ jmp boolean_no_jmp_label_65
 boolean_true_label_64:
 boolean_no_jmp_label_65:
 #FunctionCallExpression =>
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, row
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, col
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rdx
 pop %rcx
@@ -670,8 +600,6 @@ add $-32, %rsp
 call is_safe
 add $32, %rsp
 #<= FunctionCallExpression
-push %rax
-pop %rax
 push %rax
 mov $0, %rax
 push %rax
@@ -690,21 +618,17 @@ boolean_no_jmp_label_71:
 jmp branch_compound_if_end_74
 branch_68:
 #AssignmentStatement =>
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, col
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea board(%rip), %rbx
+lea board(%rip), %rbx # global, board[]
 push %rbx
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, row
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -719,22 +643,22 @@ pop %rbx
 add %rax, %rbx
 push %rbx
 pop %rbx
+push %rbx
+pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 #AssignmentStatement =>
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, count
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
 #FunctionCallExpression =>
-lea 16(%rbp), %rbx
+lea 16(%rbp), %rbx # param, row
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 mov $1, %rax
 push %rax
@@ -748,13 +672,13 @@ call solve
 add $32, %rsp
 #<= FunctionCallExpression
 push %rax
-pop %rax
-push %rax
 pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, count
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -764,7 +688,7 @@ jmp branch_compound_if_end_74
 branch_compound_if_end_74:
 updater_62:
 #AssignmentStatement =>
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, col
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -775,7 +699,9 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -32(%rbp), %rbx
+lea -32(%rbp), %rbx # local, col
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -785,12 +711,10 @@ jmp loop_start_60
 loop_end_61:
 #<= ForLoopStatement
 #ReturnStatement =>
-lea -24(%rbp), %rbx
+lea -24(%rbp), %rbx # local, count
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 leave
@@ -809,14 +733,10 @@ add $-16, %rsp
 mov $0, %rax
 push %rax
 pop %rax
-push %rax
-pop %rax
 mov %rax, -8(%rbp)
 #<= DeclareStatement
 #DeclareStatement =>
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov %rax, -16(%rbp)
@@ -825,28 +745,24 @@ mov %rax, -16(%rbp)
 #AssignmentStatement =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 loop_start_75:
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
 push %rax
-pop %rax
-push %rax
-lea N(%rip), %rbx
+lea N(%rip), %rbx # global, N
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rbx
 pop %rax
@@ -863,16 +779,12 @@ boolean_no_jmp_label_80:
 #AssignmentStatement =>
 mov $-1, %rax
 push %rax
-pop %rax
-push %rax
-lea board(%rip), %rbx
+lea board(%rip), %rbx # global, board[]
 push %rbx
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 mov $1, %rcx
@@ -887,12 +799,14 @@ pop %rbx
 add %rax, %rbx
 push %rbx
 pop %rbx
+push %rbx
+pop %rbx
 pop %rax
 mov %rax, (%rbx)
 #<= AssignmentStatement
 updater_77:
 #AssignmentStatement =>
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
 push %rbx
 pop %rbx
 mov (%rbx), %rax
@@ -903,7 +817,9 @@ pop %rbx
 pop %rax
 add %rbx, %rax
 push %rax
-lea -8(%rbp), %rbx
+lea -8(%rbp), %rbx # local, i
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -916,17 +832,15 @@ loop_end_76:
 #FunctionCallExpression =>
 mov $0, %rax
 push %rax
-pop %rax
-push %rax
 pop %rcx
 add $-32, %rsp
 call solve
 add $32, %rsp
 #<= FunctionCallExpression
 push %rax
-pop %rax
-push %rax
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, count
+push %rbx
+pop %rbx
 push %rbx
 pop %rbx
 pop %rax
@@ -935,14 +849,10 @@ mov %rax, (%rbx)
 #FunctionCallExpression =>
 lea stringLiteral_3(%rip), %rax
 push %rax
-pop %rax
-push %rax
-lea -16(%rbp), %rbx
+lea -16(%rbp), %rbx # local, count
 push %rbx
 pop %rbx
 mov (%rbx), %rax
-push %rax
-pop %rax
 push %rax
 pop %rdx
 pop %rcx
@@ -952,8 +862,6 @@ add $32, %rsp
 #<= FunctionCallExpression
 #ReturnStatement =>
 mov $0, %rax
-push %rax
-pop %rax
 push %rax
 pop %rax
 leave
